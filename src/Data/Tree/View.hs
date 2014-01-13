@@ -2,8 +2,8 @@ module Data.Tree.View
     ( showTree
     , drawTree
     , NodeInfo (..)
-    , showTreeHtml
     , htmlTree
+    , writeHtmlTree
     ) where
 
 
@@ -85,12 +85,13 @@ showTreeHtml' (Node n ns)
     =  [htmlNode n ++ "<span id=\"children_node" ++ show (snd n) ++ "\" class=\"children\">"]
     ++ appLast (concat (indentChildren (map showTreeHtml' ns))) "</span>"
 
-showTreeHtml :: Tree NodeInfo -> String
-showTreeHtml tree = unlines $ lines template1 ++ showTreeHtml' (enumTree tree) ++ lines template2
-
 -- | Convert a 'Tree' to HTML with foldable nodes
-htmlTree :: FilePath -> Tree NodeInfo -> IO ()
-htmlTree file = writeFile file . showTreeHtml
+htmlTree :: Tree NodeInfo -> String
+htmlTree tree = unlines $ lines template1 ++ showTreeHtml' (enumTree tree) ++ lines template2
+
+-- | Convert a 'Tree' to an HTML file with foldable nodes
+writeHtmlTree :: FilePath -> Tree NodeInfo -> IO ()
+writeHtmlTree file = writeFile file . htmlTree
 
 template1 =
   "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
