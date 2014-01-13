@@ -2,6 +2,7 @@ module Data.Tree.View
     ( showTree
     , drawTree
     , NodeInfo (..)
+    , showTreeHtml
     , htmlTree
     ) where
 
@@ -63,7 +64,7 @@ enumTree = flip evalState 0 . traverse count
 data NodeInfo = NodeInfo
     { nodeName :: String  -- ^ Node name (to be displayed in the HTML tree view)
     , nodeInfo :: String  -- ^ Additional information (to be displayed when hovering the mouse over
-                          --   the node). This field may contain line breaks
+                          --   the node). This field may contain line breaks.
     }
 
 htmlNode :: (NodeInfo, Int) -> String
@@ -84,12 +85,12 @@ showTreeHtml' (Node n ns)
     =  [htmlNode n ++ "<span id=\"children_node" ++ show (snd n) ++ "\" class=\"children\">"]
     ++ appLast (concat (indentChildren (map showTreeHtml' ns))) "</span>"
 
-showTreeHtml :: Tree (NodeInfo, Int) -> String
-showTreeHtml tree = unlines $ lines template1 ++ showTreeHtml' tree ++ lines template2
+showTreeHtml :: Tree NodeInfo -> String
+showTreeHtml tree = unlines $ lines template1 ++ showTreeHtml' (enumTree tree) ++ lines template2
 
 -- | Convert a 'Tree' to HTML with foldable nodes
 htmlTree :: FilePath -> Tree NodeInfo -> IO ()
-htmlTree file = writeFile file . showTreeHtml . enumTree
+htmlTree file = writeFile file . showTreeHtml
 
 template1 =
   "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
