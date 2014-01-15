@@ -101,10 +101,6 @@ template1 =
   \  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n\
   \  <title>Tree view</title>\n\
   \  <style type=\"text/css\">\n\
-  \    body {\n\
-  \      font-family: monospace;\n\
-  \      font-size:   12px;\n\
-  \    }\n\
   \    .node {\n\
   \      color:       blue;\n\
   \      font-weight: bold;\n\
