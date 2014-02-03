@@ -1,5 +1,5 @@
 name:                tree-view
-version:             0.3
+version:             0.4
 synopsis:            Render trees as foldable HTML and Unicode art
 description:         Render trees as foldable HTML and Unicode art
                      .
@@ -34,7 +34,7 @@ library
     src
 
   build-depends:
-    base < 4.8,
+    base < 5,
     containers,
     mtl
 
