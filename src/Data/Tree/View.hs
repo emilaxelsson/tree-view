@@ -165,18 +165,19 @@ templatePre1 =
 cssTemplate =
   "  <style type=\"text/css\">\n\
   \    .node {\n\
-  \      font-weight: bold;\n\
   \    }\n\
   \    .interactive:hover {\n\
   \        background-color: #CCC;\n\
   \    }\n\
   \    .collapsed {\n\
-  \      cursor: pointer;\n\
-  \      color:  grey;\n\
+  \      cursor:      pointer;\n\
+  \      color:       grey;\n\
+  \      font-weight: bold;\n\
   \    }\n\
   \    .expanded {\n\
-  \      cursor: pointer;\n\
-  \      color:  #009;\n\
+  \      cursor:      pointer;\n\
+  \      color:       #009;\n\
+  \      font-weight: bold;\n\
   \    }\n\
   \    .fixed {\n\
   \      color: black;\n\
