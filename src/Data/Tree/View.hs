@@ -150,7 +150,7 @@ template1 =
   \    }\n\
   \    .expanded {\n\
   \      cursor: pointer;\n\
-  \      color:  blue;\n\
+  \      color:  #009;\n\
   \    }\n\
   \    .fixed {\n\
   \      color: black;\n\
