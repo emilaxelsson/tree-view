@@ -75,6 +75,13 @@ data NodeInfo = NodeInfo
                               --   the node). This field may contain line breaks.
     }
 
+escapeBrackets :: String -> String
+escapeBrackets = concatMap fixBrack
+  where
+    fixBrack '<' = "&lt;"
+    fixBrack '>' = "&gt;"
+    fixBrack c   = [c]
+
 htmlNode :: (NodeInfo, Int) -> String
 htmlNode (n,i) = concat
     [ "<span id=\"node"
@@ -87,7 +94,7 @@ htmlNode (n,i) = concat
     , nodeInfo n
     , "\""
     , ">"
-    , nodeName n
+    , escapeBrackets $ nodeName n
     , "</span>"
     ]
   where
