@@ -107,7 +107,7 @@ htmlNode (n,i) = concat
       _     -> " onclick=\"toggle(event)\" "
 
 showTreeHtml' :: Tree (NodeInfo, Int) -> [String]
-showTreeHtml' (Node n []) = [htmlNode n]
+showTreeHtml' (Node (n,i) []) = [htmlNode (n {nodeBehavior = Fixed}, i)]
 showTreeHtml' (Node n ns)
     =  [  htmlNode n ++ "<span id=\"children_node" ++ show (snd n)
        ++ "\" class=" ++ display ++ ">"
