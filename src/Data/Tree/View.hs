@@ -119,25 +119,51 @@ showTreeHtml' (Node n ns)
       _                  -> show "shown"
 
 -- | Convert a 'Tree' to HTML with foldable nodes
-htmlTree :: Tree NodeInfo -> String
-htmlTree tree = unlines $ lines template1 ++ showTreeHtml' (enumTree tree) ++ lines template2
+htmlTree
+    :: Maybe FilePath  -- ^ Path/URL to external CSS file
+    -> Tree NodeInfo   -- ^ Tree to render
+    -> String
+htmlTree css tree = unlines
+    $  lines templatePre1
+    ++ lines cssLink
+    ++ lines cssTempl
+    ++ lines templatePre2
+    ++ showTreeHtml' (enumTree tree)
+    ++ lines templatePost
+  where
+    cssTempl = case css of
+      Nothing -> cssTemplate
+      _       -> ""
+
+    cssLink = case css of
+      Just file
+          -> "  <link rel=\"stylesheet\" href=\""
+          ++ file
+          ++ "\" type=\"text/css\" />"
+      _ -> ""
 
 -- | Convert a 'Tree' to an HTML file with foldable nodes
-writeHtmlTree :: FilePath -> Tree NodeInfo -> IO ()
-writeHtmlTree file tree = do
+writeHtmlTree
+    :: Maybe FilePath  -- ^ Path/URL to external CSS file
+    -> FilePath        -- ^ Output file
+    -> Tree NodeInfo   -- ^ Tree to render
+    -> IO ()
+writeHtmlTree css file tree = do
     h <- openFile file WriteMode
     hSetEncoding h utf8
-    hPutStr h $ htmlTree $ tree
+    hPutStr h $ htmlTree css $ tree
     hClose h
 
-template1 =
+templatePre1 =
   "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
   \<html xmlns=\"http://www.w3.org/1999/xhtml\">\n\
   \\n\
   \<head>\n\
   \  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n\
-  \  <title>Tree view</title>\n\
-  \  <style type=\"text/css\">\n\
+  \  <title>Tree view</title>\n"
+
+cssTemplate =
+  "  <style type=\"text/css\">\n\
   \    .node {\n\
   \      font-weight: bold;\n\
   \    }\n\
@@ -155,6 +181,10 @@ template1 =
   \    .fixed {\n\
   \      color: black;\n\
   \    }\n\
+  \  </style>\n"
+
+templatePre2 =
+  "  <style type=\"text/css\">\n\
   \    .shown {\n\
   \      display: inline;\n\
   \    }\n\
@@ -183,7 +213,7 @@ template1 =
   \<body>\n\
   \<pre>\n"
 
-template2 =
+templatePost =
   "</pre>\n\
   \</body>\n\
   \\n\
