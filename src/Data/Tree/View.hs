@@ -12,6 +12,7 @@ import Control.Monad.State
 import Data.Traversable (traverse)
 import Data.Tree (Tree (..))
 import qualified Data.Tree as Tree
+import System.IO
 
 
 
@@ -91,7 +92,10 @@ htmlTree tree = unlines $ lines template1 ++ showTreeHtml' (enumTree tree) ++ li
 
 -- | Convert a 'Tree' to an HTML file with foldable nodes
 writeHtmlTree :: FilePath -> Tree NodeInfo -> IO ()
-writeHtmlTree file = writeFile file . htmlTree
+writeHtmlTree file tree = do
+    h <- openFile file WriteMode
+    hSetEncoding h utf8
+    hPutStr h $ htmlTree $ tree
 
 template1 =
   "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
