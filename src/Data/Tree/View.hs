@@ -72,7 +72,7 @@ htmlNode :: (NodeInfo, Int) -> String
 htmlNode (n,i)
     =  "<span id=\"node"
     ++ show i
-    ++ "\" class=\"node\" onclick=\"toggle(event)\" "
+    ++ "\" class=\"node expanded\" onclick=\"toggle(event)\" "
     ++ "title=\""
     ++ nodeInfo n
     ++ "\""
@@ -83,7 +83,7 @@ htmlNode (n,i)
 showTreeHtml' :: Tree (NodeInfo, Int) -> [String]
 showTreeHtml' (Node n []) = [htmlNode n]
 showTreeHtml' (Node n ns)
-    =  [htmlNode n ++ "<span id=\"children_node" ++ show (snd n) ++ "\" class=\"children\">"]
+    =  [htmlNode n ++ "<span id=\"children_node" ++ show (snd n) ++ "\" class=\"shown\">"]
     ++ appLast (concat (indentChildren (map showTreeHtml' ns))) "</span>"
 
 -- | Convert a 'Tree' to HTML with foldable nodes
@@ -106,15 +106,23 @@ template1 =
   \  <title>Tree view</title>\n\
   \  <style type=\"text/css\">\n\
   \    .node {\n\
-  \      color:       blue;\n\
   \      font-weight: bold;\n\
   \      cursor:      pointer;\n\
   \    }\n\
   \    .node:hover {\n\
   \        background-color: #CCC;\n\
   \    }\n\
-  \    .children {\n\
+  \    .expanded {\n\
+  \      color: blue;\n\
+  \    }\n\
+  \    .collapsed {\n\
+  \      color: grey;\n\
+  \    }\n\
+  \    .shown {\n\
   \      display: inline;\n\
+  \    }\n\
+  \    .hidden {\n\
+  \      display: none;\n\
   \    }\n\
   \  </style>\n\
   \  <script type=\"text/javascript\">\n\
@@ -125,11 +133,11 @@ template1 =
   \          cstyle   = window.getComputedStyle(children),\n\
   \          cdispay  = cstyle.getPropertyValue(\"display\");\n\
   \      if (cdispay == \"inline\") {\n\
-  \        document.getElementById(\"children_\" + id).style.display = \"none\";\n\
-  \        document.getElementById(id).style.color = \"gray\";\n\
+  \        document.getElementById(\"children_\" + id).className = \"hidden\";\n\
+  \        document.getElementById(id).className = \"node collapsed\";\n\
   \      } else {\n\
-  \        document.getElementById(\"children_\" + id).style.display = \"inline\";\n\
-  \        document.getElementById(id).style.color = \"blue\";\n\
+  \        document.getElementById(\"children_\" + id).className = \"shown\";\n\
+  \        document.getElementById(id).className = \"node expanded\";\n\
   \      }\n\
   \    }\n\
   \  </script>\n\
