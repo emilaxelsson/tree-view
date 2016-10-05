@@ -1,6 +1,7 @@
 module Data.Tree.View
     ( showTree
     , drawTree
+    , Behavior (..)
     , NodeInfo (..)
     , htmlTree
     , writeHtmlTree
@@ -61,30 +62,54 @@ enumTree = flip evalState 0 . traverse count
       i <- get; put (i+1)
       return (a,i)
 
+data Behavior
+    = Fixed  -- ^ Non-collapsible
+    | InitiallyCollapsed
+    | InitiallyExpanded
+
 -- | A tree node
 data NodeInfo = NodeInfo
-    { nodeName :: String  -- ^ Node name (to be displayed in the HTML tree view)
-    , nodeInfo :: String  -- ^ Additional information (to be displayed when hovering the mouse over
-                          --   the node). This field may contain line breaks.
+    { nodeBehavior :: Behavior
+    , nodeName     :: String  -- ^ Node name (to be displayed in the HTML tree view)
+    , nodeInfo     :: String  -- ^ Additional information (to be displayed when hovering the mouse over
+                              --   the node). This field may contain line breaks.
     }
 
 htmlNode :: (NodeInfo, Int) -> String
-htmlNode (n,i)
-    =  "<span id=\"node"
-    ++ show i
-    ++ "\" class=\"node expanded\" onclick=\"toggle(event)\" "
-    ++ "title=\""
-    ++ nodeInfo n
-    ++ "\""
-    ++ ">"
-    ++ nodeName n
-    ++ "</span>"
+htmlNode (n,i) = concat
+    [ "<span id=\"node"
+    , show i
+    , "\" class=\"node "
+    , mode
+    , "\""
+    , onclick
+    , "title=\""
+    , nodeInfo n
+    , "\""
+    , ">"
+    , nodeName n
+    , "</span>"
+    ]
+  where
+    mode = case nodeBehavior n of
+      Fixed              -> "fixed"
+      InitiallyCollapsed -> "interactive collapsed"
+      InitiallyExpanded  -> "interactive expanded"
+    onclick = case nodeBehavior n of
+      Fixed -> " "
+      _     -> " onclick=\"toggle(event)\" "
 
 showTreeHtml' :: Tree (NodeInfo, Int) -> [String]
 showTreeHtml' (Node n []) = [htmlNode n]
 showTreeHtml' (Node n ns)
-    =  [htmlNode n ++ "<span id=\"children_node" ++ show (snd n) ++ "\" class=\"shown\">"]
+    =  [  htmlNode n ++ "<span id=\"children_node" ++ show (snd n)
+       ++ "\" class=" ++ display ++ ">"
+       ]
     ++ appLast (concat (indentChildren (map showTreeHtml' ns))) "</span>"
+  where
+    display = case nodeBehavior $ fst n of
+      InitiallyCollapsed -> show "hidden"
+      _                  -> show "shown"
 
 -- | Convert a 'Tree' to HTML with foldable nodes
 htmlTree :: Tree NodeInfo -> String
@@ -110,14 +135,17 @@ template1 =
   \      font-weight: bold;\n\
   \      cursor:      pointer;\n\
   \    }\n\
-  \    .node:hover {\n\
+  \    .interactive:hover {\n\
   \        background-color: #CCC;\n\
+  \    }\n\
+  \    .collapsed {\n\
+  \      color: grey;\n\
   \    }\n\
   \    .expanded {\n\
   \      color: blue;\n\
   \    }\n\
-  \    .collapsed {\n\
-  \      color: grey;\n\
+  \    .fixed {\n\
+  \      color: black;\n\
   \    }\n\
   \    .shown {\n\
   \      display: inline;\n\
