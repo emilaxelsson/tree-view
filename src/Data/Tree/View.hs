@@ -140,16 +140,17 @@ template1 =
   \  <style type=\"text/css\">\n\
   \    .node {\n\
   \      font-weight: bold;\n\
-  \      cursor:      pointer;\n\
   \    }\n\
   \    .interactive:hover {\n\
   \        background-color: #CCC;\n\
   \    }\n\
   \    .collapsed {\n\
-  \      color: grey;\n\
+  \      cursor: pointer;\n\
+  \      color:  grey;\n\
   \    }\n\
   \    .expanded {\n\
-  \      color: blue;\n\
+  \      cursor: pointer;\n\
+  \      color:  blue;\n\
   \    }\n\
   \    .fixed {\n\
   \      color: black;\n\
