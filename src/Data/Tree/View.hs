@@ -171,10 +171,10 @@ template1 =
   \          cdispay  = cstyle.getPropertyValue(\"display\");\n\
   \      if (cdispay == \"inline\") {\n\
   \        document.getElementById(\"children_\" + id).className = \"hidden\";\n\
-  \        document.getElementById(id).className = \"node collapsed\";\n\
+  \        document.getElementById(id).className = \"node interactive collapsed\";\n\
   \      } else {\n\
   \        document.getElementById(\"children_\" + id).className = \"shown\";\n\
-  \        document.getElementById(id).className = \"node expanded\";\n\
+  \        document.getElementById(id).className = \"node interactive expanded\";\n\
   \      }\n\
   \    }\n\
   \  </script>\n\
