@@ -1,5 +1,5 @@
 name:                tree-view
-version:             0.5
+version:             0.5.1
 synopsis:            Render trees as foldable HTML and Unicode art
 description:         Render trees as foldable HTML and Unicode art
                      .
@@ -16,15 +16,15 @@ description:         Render trees as foldable HTML and Unicode art
 license:             BSD3
 license-file:        LICENSE
 author:              Emil Axelsson
-maintainer:          emax@chalmers.se
-copyright:           Copyright (c) 2014 Emil Axelsson
+maintainer:          78emil@gmail.com
+copyright:           Copyright (c) 2014-2021 Emil Axelsson
 category:            Data
 build-type:          Simple
 cabal-version:       >=1.10
 
 source-repository head
-  type:      darcs
-  location:  http://hub.darcs.net/emax/tree-view
+  type:     git
+  location: git@github.com:emilaxelsson/tree-view.git
 
 library
   exposed-modules:
